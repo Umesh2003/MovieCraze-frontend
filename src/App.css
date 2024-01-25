@@ -1,0 +1,122 @@
+/*
+  btn-color : #e4d804
+*/
+
+:root {
+  --btn-bg: #e4d804;
+  --btn-text: #212529;
+  --bg-white: #f8f9fa;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+}
+
+.flex-items {
+  display: flex;
+}
+
+.pos-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-border {
+  border: 2px solid var(--btn-bg);
+  padding: 0.8rem 2.8rem;
+  border-radius: 25px;
+  font-weight: 700;
+  transition: 0.3s all;
+}
+
+.btn-border:hover {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  text-decoration: none;
+}
+
+/* carousel */
+
+/* .carousel-item {
+  position: relative;
+} */
+.carousel-caption {
+  position: absolute;
+  top: 25%;
+  right: 40%;
+  padding: 4%;
+  left: 0;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.text-yellow {
+  color: var(--btn-bg);
+}
+
+.big-font {
+  font-size: 3.8rem;
+  font-weight: 900;
+}
+
+/* Carousel */
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 4%;
+}
+
+.carousel-indicators .active {
+  background-color: var(--btn-bg);
+}
+
+/* links */
+.nav-link:hover {
+  color: #e4d804;
+}
+
+/* scrolll bar */
+
+/* Firefox */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e4d804 #080422;
+}
+
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 1px;
+  background-color: #080422;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: #110946;
+}
+
+*::-webkit-scrollbar-track:active {
+  background-color: #150b54;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 1px;
+  background-color: #e4d804;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #c7bd03;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: #c7bd03;
+}
