@@ -9,6 +9,7 @@ function Show() {
   const customFontStyle = {
     fontFamily: "Poppins, sans-serif",
   };
+  console.log("Hello")
 
   return (
     <Box

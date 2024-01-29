@@ -109,15 +109,15 @@ function Footer() {
             marginBottom={8}
           />
 
-          <Flex flexDirection="row" gap={16} marginTop={2}>
-            <Flex flexDirection="column">
+          <Flex  flexDirection="row" gap={16} marginTop={2}>
+            <Flex  flexDirection="column">
               {categories.map((category, index) => (
                 <Text key={index} color="#D2CFCF" fontSize="15px">
                   {category.name}
                 </Text>
               ))}
             </Flex>
-            <Flex flexDirection="column" justifyContent="center" gap={4}>
+            <Flex flexDirection="column" alignItems="center" gap={4}>
               {categories.map((category, index) => (
                 <span key={index}>{`(${category.count})`}</span>
               ))}

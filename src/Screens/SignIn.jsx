@@ -7,68 +7,83 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {useDispatch,useSelector} from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import Loading from "../Components/Loading";
+import {login, selectLoading} from "../Redux/usersSlice";
+import AuthPageContainer from "./Authentication";
+
 
 function SignIn() {
-  const [username, setUsrname] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate=useNavigate();
+  const dispatch=useDispatch();
+  const loading=useSelector(selectLoading);
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    console.log(username, password);
+    const data={
+      email,
+      password
+    }
+    dispatch(login(data,()=>{navigate("/")}));
   }
 
+
   return (
-    <Box color="#ffff">
-      <form onSubmit={handleSubmit}>
-        <FormControl mb={8}>
-          <FormLabel>Username</FormLabel>
-          <Input
-            type="email"
-            value={username}
-            placeholder="Username"
-            onChange={(e) => setUsrname(e.target.value)}
-            isRequired
-          />
-        </FormControl>
+    <AuthPageContainer>
+      {loading && <Loading mssg="Logging In..." />}
+      <Box color="#ffff">
+        <form onSubmit={handleSubmit}>
+          <FormControl mb={8}>
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              value={email}
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              isRequired
+            />
+          </FormControl>
 
-        <FormControl mb={10}>
-          <FormLabel>Password</FormLabel>
-          <Input
-            type="password"
-            value={password}
-            placeholder="*******"
-            onChange={(e) => setPassword(e.target.value)}
-            isRequired
-          />
-        </FormControl>
+          <FormControl mb={10}>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              value={password}
+              placeholder="*******"
+              onChange={(e) => setPassword(e.target.value)}
+              isRequired
+            />
+          </FormControl>
 
-        <Button
-          marginBottom={4}
-          type="submit"
-          width="100%"
-          colorScheme="yellow"
-          variant="solid"
-        >
-          Sign in
-        </Button>
+          <Button
+            marginBottom={4}
+            type="submit"
+            width="100%"
+            colorScheme="yellow"
+            variant="solid"
+          >
+            Sign in
+          </Button>
 
-        <Text textAlign="center" fontSize="md">
-          Don`t have an account?{" "}
-          <span>
-            <Link
-              to="/authentication/signup"
-              style={{
-                color: "#e4d804",
-              }}
-            >
-              Sign up
-            </Link>
-          </span>
-        </Text>
-      </form>
-    </Box>
+          <Text textAlign="center" fontSize="md">
+            Don`t have an account?{" "}
+            <span>
+              <Link
+                to="/signup"
+                style={{
+                  color: "#e4d804",
+                }}
+              >
+                Sign up
+              </Link>
+            </span>
+          </Text>
+        </form>
+      </Box>
+    </AuthPageContainer>
   );
 }
 

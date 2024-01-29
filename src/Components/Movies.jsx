@@ -44,7 +44,7 @@ const CustomTabs = () => (
 );
 
 const MovieDetails = ({ movie }) => (
-  <Link to={`/bollywood`}>
+  <Link to={`/show`}>
     <Box borderRadius="3px" overflow="hidden" bg="transparent">
       <Box overflow="hidden">
         <Image

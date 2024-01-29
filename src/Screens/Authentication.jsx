@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { Box } from "@chakra-ui/react";
-import { Outlet } from "react-router-dom";
 import AuthNav from "../ui/AuthNav";
 
-function Authentication() {
+function AuthPageContainer({children}) {
   return (
     <Box
       height="100vh"
@@ -23,10 +22,10 @@ function Authentication() {
         py={6}
       >
         <AuthNav />
-        <Outlet />
+        {children}
       </Box>
     </Box>
   );
 }
 
-export default Authentication;
+export default AuthPageContainer;
