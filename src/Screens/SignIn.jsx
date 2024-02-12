@@ -7,29 +7,31 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import {useDispatch,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../Components/Loading";
-import {login, selectLoading} from "../Redux/usersSlice";
+import { login, selectLoading } from "../Redux/usersSlice";
 import AuthPageContainer from "./Authentication";
-
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
-  const loading=useSelector(selectLoading);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const loading = useSelector(selectLoading);
 
   function handleSubmit(e) {
     e.preventDefault();
-    const data={
+    const data = {
       email,
-      password
-    }
-    dispatch(login(data,()=>{navigate("/")}));
+      password,
+    };
+    dispatch(
+      login(data, () => {
+        navigate("/");
+      })
+    );
   }
-
 
   return (
     <AuthPageContainer>
@@ -41,7 +43,7 @@ function SignIn() {
             <Input
               type="email"
               value={email}
-              placeholder="Email"
+              placeholder="Enter email"
               onChange={(e) => setEmail(e.target.value)}
               isRequired
             />

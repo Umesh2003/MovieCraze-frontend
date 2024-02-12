@@ -24,6 +24,7 @@ export const slice = createSlice({
 export const { setUser, setLoading } = slice.actions;
 
 export const login = (userData, cb) => async (dispatch) => {
+  console.log(userData);
   dispatch(setLoading(true));
   try {
     const response = await window.fetch(LOGIN, {

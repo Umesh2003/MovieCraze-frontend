@@ -1,27 +1,44 @@
-import { Box, Flex, Image, Text, Divider, Center } from "@chakra-ui/react";
+/* eslint-disable no-unused-vars */
+import {
+  Box,
+  Flex,
+  Image,
+  Text,
+  Divider,
+  Center,
+  Button,
+  Drawer,
+} from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 import { themeConfig } from "../Utils/themeConfig";
 import MovieDetail from "../Sections/MovieDetail";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+
+import ModalContainer from "../Components/ModalContainer";
+
+import { AddIcon } from "@chakra-ui/icons";
+import ReviewDrawer from "../Components/ReviewDrawer";
+import ReviewDetails from "../Components/ReviewDetails";
 
 function Show() {
   const customFontStyle = {
     fontFamily: "Poppins, sans-serif",
   };
-  console.log("Hello")
+
+  const movie = {
+    name: "Uri: The Surgical Strike",
+  };
 
   return (
     <Box
       color="white"
-      bgImage={themeConfig.bgGradient}
+      bgImage={themeConfig.moviePagebg}
       fontStyle={customFontStyle}
     >
       <NavBar />
       <Flex
         flexDirection="row"
         px={16}
-        paddingTop={36}
+        paddingTop={32}
         paddingBottom={12}
         gap={8}
       >
@@ -56,17 +73,15 @@ function Show() {
             injected humor.
           </Text>
           <br />
-          <button className="btn-border">
-            <Flex
-              flexDirection="row"
-              gap={2}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <FontAwesomeIcon icon={faHeart} />
-              <span>ADD TO FAVOURITES</span>
-            </Flex>
-          </button>
+
+          <Flex gap={4}>
+            <Button leftIcon={<AddIcon />} colorScheme="yellow">
+              Add to favourites
+            </Button>
+
+            {/* <ModalContainer movie={movie} />
+            <ReviewDrawer /> */}
+          </Flex>
         </Box>
 
         <Center height={450}>
@@ -106,6 +121,9 @@ function Show() {
           </Flex>
         </Box>
       </Flex>
+      <Box mt={4} px={16}>
+        <ReviewDetails />
+      </Box>
     </Box>
   );
 }

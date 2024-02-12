@@ -18,29 +18,6 @@ body {
   height: 100vh;
 }
 
-.flex-items {
-  display: flex;
-}
-
-.pos-center {
-  justify-content: center;
-  align-items: center;
-}
-
-.btn-border {
-  border: 2px solid var(--btn-bg);
-  padding: 0.8rem 2.8rem;
-  border-radius: 25px;
-  font-weight: 700;
-  transition: 0.3s all;
-}
-
-.btn-border:hover {
-  background-color: var(--btn-bg);
-  color: var(--btn-text);
-  text-decoration: none;
-}
-
 /* carousel */
 
 /* .carousel-item {
@@ -88,6 +65,36 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: #e4d804 #080422;
+}
+
+/* HTML: <div class="ribbon">Your text content</div> */
+.ribbon {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+}
+.ribbon {
+  --r: 0.8em; /* control the cutout */
+
+  border-inline: 0.5em solid #0000;
+  padding: 0.5em 0.6em calc(var(--r) + 0.2em);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    calc(100% - 0.5em) 100%,
+    50% calc(100% - var(--r)),
+    0.5em 100%,
+    0 100%
+  );
+  background: radial-gradient(50% 0.2em at top, #000a, #0000) border-box,
+    rgba(24, 23, 23, 0.779) padding-box; /* the color  */
+  width: fit-content;
+}
+
+.ribbon:hover {
+  background: radial-gradient(50% 0.2em at top, #000a, #0000) border-box,
+    rgba(44, 44, 44, 0.779) padding-box;
 }
 
 /* Chrome, Edge and Safari */
