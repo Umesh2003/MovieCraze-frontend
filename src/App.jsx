@@ -9,6 +9,8 @@ import Contact from "./Screens/Contact";
 import SignIn from "./Screens/SignIn";
 import SignUp from "./Screens/Signup";
 import Show from "./Screens/Show.jsx";
+import Toast from "./Components/Toast"
+
 
 function App() {
   return (
@@ -18,11 +20,12 @@ function App() {
         <Route path="/bollywood" element={<Bollywood />} />
         <Route path="hollywood" element={<Hollywood />} />
         <Route path="favourites" element={<Favourites />} />
-        <Route path="show" element={<Show />} />
+        <Route path="/show/:movie_id" element={<Show />} />
         <Route path="contact" element={<Contact />} />
         <Route path="signin" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
       </Routes>
+      <Toast/>
     </BrowserRouter>
   );
 }

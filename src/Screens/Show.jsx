@@ -7,26 +7,57 @@ import {
   Divider,
   Center,
   Button,
-  Drawer,
+  useToast,
 } from "@chakra-ui/react";
 import NavBar from "../Components/NavBar";
 import { themeConfig } from "../Utils/themeConfig";
 import MovieDetail from "../Sections/MovieDetail";
-
-import ModalContainer from "../Components/ModalContainer";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
-import ReviewDrawer from "../Components/ReviewDrawer";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getMovieById, selectMovie,selectLoading, addToFavourite } from "../Redux/movieSlice";
+import Loading from "../Components/Loading";
+import {selectUser} from "../Redux/usersSlice";
+import {displayToast} from "../Redux/toastSlice";
 import ReviewDetails from "../Components/ReviewDetails";
+import {getReviews} from "../Redux/reviewSlice";
 
 function Show() {
   const customFontStyle = {
     fontFamily: "Poppins, sans-serif",
   };
+  const { movie_id } = useParams();
+  const dispatch = useDispatch();
+  const navigate=useNavigate();
 
-  const movie = {
-    name: "Uri: The Surgical Strike",
-  };
+
+  const movie = useSelector(selectMovie);
+  const loading = useSelector(selectLoading);
+  const user=useSelector(selectUser)
+  console.log(loading);
+
+  useEffect(() => {
+    console.log("Hello World");
+    dispatch(getMovieById(movie_id));
+    dispatch(getReviews(movie_id));
+  }, [dispatch, movie_id]);
+
+  function favHandler(){
+    if (!user) {
+      navigate("/signin");
+      dispatch(displayToast("Please LogIn First"))
+    }
+    dispatch(addToFavourite(user.user_id,movie_id));
+  }
+
+  if (loading) {
+    console.log("Hello World here laoind")
+    return (
+      <Loading mssg="Loading Movie Details...."/>
+    )
+  }
+
 
   return (
     <Box
@@ -35,95 +66,88 @@ function Show() {
       fontStyle={customFontStyle}
     >
       <NavBar />
-      <Flex
-        flexDirection="row"
-        px={16}
-        paddingTop={32}
-        paddingBottom={12}
-        gap={8}
-      >
-        {/* Movie image */}
-        <Image
-          src="https://m.media-amazon.com/images/M/MV5BMWU4ZjNlNTQtOGE2MS00NDI0LWFlYjMtMmY3ZWVkMjJkNGRmXkEyXkFqcGdeQXVyNjE1OTQ0NjA@._V1_FMjpg_UX831_.jpg"
-          alt="MovieImage"
-          boxSize="28%"
-        />
+      {movie && (
+        <Flex
+          flexDirection="row"
+          px={16}
+          paddingTop={32}
+          paddingBottom={12}
+          gap={8}
+        >
+          <Image src={movie.Poster_Link} alt="MovieImage" boxSize="28%" />
 
-        {/* Movie details */}
+          {/* Movie details */}
 
-        <Box py={4} w="60%">
-          <Text
-            color={themeConfig.iconstextColor}
-            fontSize="2xl"
-            fontWeight={700}
-            letterSpacing={1.2}
-          >
-            New Release
-          </Text>
-          <Text color="white" fontSize="5xl" fontWeight={700}>
-            Uri: The Surgical Strike
-          </Text>
-
-          <MovieDetail movieType="Action, Comedy" year={2019} duration={160} />
-          <br />
-          <Text lineHeight={1.8} color={themeConfig.smallTextColor}>
-            Lorem ipsum dolor sit amet, consecetur adipiscing elseddo eiusmod
-            tempor.There are many variations of passages of lorem Ipsum
-            available, but the majority have suffered alteration in some
-            injected humor.
-          </Text>
-          <br />
-
-          <Flex gap={4}>
-            <Button leftIcon={<AddIcon />} colorScheme="yellow">
-              Add to favourites
-            </Button>
-
-            {/* <ModalContainer movie={movie} />
-            <ReviewDrawer /> */}
-          </Flex>
-        </Box>
-
-        <Center height={450}>
-          <Divider orientation="vertical"></Divider>
-        </Center>
-
-        <Box py={14}>
-          <Flex gap={2}>
-            <Text fontWeight={500}>Director</Text>
-            <Text color={themeConfig.iconstextColor}>Aditya Dhar</Text>
-          </Flex>
-
-          <Divider></Divider>
-          <Flex gap={2}>
-            <Text fontWeight={500}>Writer</Text>
-            <Text color={themeConfig.iconstextColor}>Aditya Dhar</Text>
-          </Flex>
-
-          <Divider></Divider>
-          <Flex gap={2}>
-            <Text fontWeight={500}>Stars</Text>
-            <Text color={themeConfig.iconstextColor}>
-              Vicky Kaushal .Paresh Rawal .Mohit Raina
+          <Box py={4} w="60%">
+            <Text
+              color={themeConfig.iconstextColor}
+              fontSize="2xl"
+              fontWeight={700}
+              letterSpacing={1.2}
+            >
+              New Release
             </Text>
-          </Flex>
+            <Text color="white" fontSize="5xl" fontWeight={700}>
+              {movie.Series_Title}
+            </Text>
 
-          <Divider></Divider>
-          <Flex gap={2}>
-            <Text fontWeight={500}>Genre</Text>
-            <Text color={themeConfig.iconstextColor}>Action, Adventure</Text>
-          </Flex>
+            <MovieDetail
+              movieType={movie.Genre.split("|").join(", ")}
+              year={movie.Released_Year}
+              duration={movie.Runtime}
+            />
+            <br />
+            <Text lineHeight={1.8} color={themeConfig.smallTextColor}>
+              {movie.Overview}
+            </Text>
+            <br />
 
-          <Divider></Divider>
-          <Flex gap={2}>
-            <Text fontWeight={500}>Release Date</Text>
-            <Text color={themeConfig.iconstextColor}>May 1, 2019</Text>
-          </Flex>
+            <Flex gap={4}>
+              <Button leftIcon={<AddIcon />} onClick={favHandler} colorScheme="yellow">
+                Add to favourites
+              </Button>
+            </Flex>
+          </Box>
+
+          <Center height={450}>
+            <Divider orientation="vertical" />
+          </Center>
+
+          <Box py={14}>
+            <Flex gap={2}>
+              <Text fontWeight={500}>Director:</Text>
+              <Text color={themeConfig.iconstextColor}>{movie.Director}</Text>
+            </Flex>
+
+            <Divider />
+            <Flex gap={2}>
+              <Text fontWeight={500}>Stars:</Text>
+              <Text color={themeConfig.iconstextColor}>
+                {movie.Star_actors.split("|").join(", ")}
+              </Text>
+            </Flex>
+
+            <Divider />
+            <Flex gap={2}>
+              <Text fontWeight={500}>Genre:</Text>
+              <Text color={themeConfig.iconstextColor}>{movie.Genre.split("|").join(", ")}</Text>
+            </Flex>
+
+            <Divider />
+            <Flex gap={2}>
+              <Text fontWeight={500}>Release Date:</Text>
+              <Text color={themeConfig.iconstextColor}>
+                {movie.Released_Year}
+              </Text>
+            </Flex>
+          </Box>
+        </Flex>
+      )}
+      {movie && 
+        <Box mt={4} px={16}>
+          <ReviewDetails movie_name={movie.Series_Title} movie_id={movie_id} />
         </Box>
-      </Flex>
-      <Box mt={4} px={16}>
-        <ReviewDetails />
-      </Box>
+      }
     </Box>
   );
 }

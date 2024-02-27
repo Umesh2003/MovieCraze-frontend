@@ -18,7 +18,7 @@ import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 
 import Logo from "../ui/Logo";
 import { Link, NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { selectUser } from "../Redux/usersSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,11 +27,33 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { themeConfig } from "../Utils/themeConfig";
 import Dropdown from "react-bootstrap/Dropdown";
+import {useDebounce} from "../../hooks/useDebounce";
+import {useEffect, useState} from "react";
+import {getSearchResults, selectSuggestions,clearSearchResults} from "../Redux/movieSlice";
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  //Here is the user object use this to extract the name and all
   const user = useSelector(selectUser);
+  const [search,setSearch]=useState("");
+  const debouncedSearch=useDebounce(search)
+  
+  const movieSuggestions=useSelector(selectSuggestions);
+
+  const dispatch=useDispatch();
   console.log(user);
+  console.log(debouncedSearch);
+  console.log(movieSuggestions);
+
+
+  useEffect(()=>{
+    if (debouncedSearch) {
+      dispatch(getSearchResults(debouncedSearch))
+    }else{
+      dispatch(clearSearchResults())
+    }
+  },[debouncedSearch]);
+
 
   return (
     <>
@@ -40,14 +62,14 @@ export default function NavBar() {
         position="fixed"
         bgColor="#1a202c"
         zIndex={10}
-        h={16}
         alignItems={"center"}
-        justifyContent={"space-between"}
-        px={10}
-        py={4}
+        justifyContent={"space-around"}
+        px={"1.4rem"}
+        py={"1.4rem"}
         width={"100%"}
         backdropBlur={8}
         boxShadow="lg"
+        top="0"
       >
         <Flex>
           <IconButton
@@ -99,13 +121,50 @@ export default function NavBar() {
                 border="none"
                 bgColor="whiteAlpha.100"
                 width="550px"
+                onChange={(e)=>{setSearch(e.target.value)}}
               />
               <InputRightElement width="4.5rem">
-                <Button variant="unstyled" h="1.75rem" size="sm">
+                <Button variant="unstyled">
                   <SearchIcon color={themeConfig.iconstextColor} boxSize={6} />
                 </Button>
               </InputRightElement>
             </InputGroup>
+            {movieSuggestions && movieSuggestions.length > 0 && search!=="" && (
+              <Box
+                position="absolute"
+                zIndex={99}
+                top="66px"
+                right="516px"
+                width="550px"
+                maxHeight="200px"
+                overflowY="auto"
+                bgColor="#171D22"
+                boxShadow="md"
+                borderRadius="md"
+                py="2"
+              >
+                {movieSuggestions.map((movie) => (
+                    <Link key={movie.movie_id} to={`/show/${movie.movie_id}`}>
+                      <Flex
+                        key={movie.id}
+                        alignItems="center"
+                        p="2"
+                        borderBottom="1px solid #E2E8F0"
+                      >
+                        <Box boxSize="50px" borderRadius="md" overflow="hidden" mr="2">
+                          <img
+                            src={movie.Poster_Link}
+                            alt={movie.Series_Title}
+                            style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                          />
+                        </Box>
+                        <Text fontSize="sm">{movie.Series_Title}</Text>
+                      </Flex>
+                    </Link>
+                ))}
+              </Box>
+            )}
+
           </Flex>
         </Flex>
 

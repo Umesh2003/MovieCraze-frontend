@@ -38,7 +38,7 @@ export const login = (userData, cb) => async (dispatch) => {
     if (response.status === 201) {
       console.log(data);
       const user = {
-        user_id: data.user._id,
+        user_id: data.user.user_id,
         userName: data.user.userName,
         email: data.user.email,
       };

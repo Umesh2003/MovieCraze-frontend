@@ -20,9 +20,8 @@ export default function StarRating({
   maxRating = 5,
   color = "#fcc419",
   size = 42,
-  className = "",
-  messages = [],
   ratings,
+  setRatings,
   label,
 }) {
   const [rating, setRating] = useState(0);
@@ -36,11 +35,14 @@ export default function StarRating({
     const isPresent = ratings.some((rating) => rating.label === label);
     const index = ratings.findIndex((obj) => obj.label === label);
 
+    const updatedRatings = [...ratings];
+
     isPresent
-      ? (ratings[index].rating = rating)
-      : ratings.push({ label: label, rating: rating });
+      ? (updatedRatings[index].rating = rating)
+      : updatedRatings.push({ label: label, rating: rating });
 
     console.log(ratings);
+    setRatings(updatedRatings);
   }
 
   return (

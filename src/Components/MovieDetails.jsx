@@ -7,14 +7,14 @@ import ReviewDrawer from "./ReviewDrawer";
 function MovieDetails({ movie, type = "" }) {
   return (
     <Box borderRadius="3px" overflow="hidden" bg="transparent">
-      <Link to="/show">
+      <Link to={`/show/${movie.movie_id}`}>
         <Box position="relative" overflow="hidden" borderRadius={2}>
           <Image
-            src={movie.cover}
-            alt={movie.title}
+            src={movie.Poster_Link}
+            alt={movie.Series_Title}
             mb={2}
             width="100%"
-            height="400px"
+            height="100%"
             objectFit="cover"
             transition="0.3s all"
             _hover={{
@@ -37,9 +37,9 @@ function MovieDetails({ movie, type = "" }) {
           py={4}
         >
           <Text fontWeight="800" color="white">
-            {movie.title}
+            {movie.Series_Title}
           </Text>
-          <Text color="#e4d804">{movie.year}</Text>
+          <Text color="#e4d804">{movie.Released_Year}</Text>
         </Flex>
 
         {type !== "fav" ? (
@@ -51,7 +51,7 @@ function MovieDetails({ movie, type = "" }) {
           >
             <Flex alignItems="center">
               <TimeIcon color="#e4d804" boxSize={3} mr={1} />
-              {movie.runtime}
+              {movie.Runtime}
             </Flex>
             <Flex alignItems="center">
               <StarIcon
@@ -60,7 +60,7 @@ function MovieDetails({ movie, type = "" }) {
                 paddingBottom={"2px"}
                 mr={1}
               />
-              {movie.rating}
+              {movie.Rating}
             </Flex>
           </Flex>
         ) : (
@@ -72,7 +72,7 @@ function MovieDetails({ movie, type = "" }) {
           >
             <Flex alignItems="center">
               <StarIcon color="#e4d804" boxSize={3} mr={1} />
-              {movie.rating}
+              {movie.Rating}
             </Flex>
 
             <ReviewDrawer size="xs" btnColor="gray" btnVarient="solid" />
