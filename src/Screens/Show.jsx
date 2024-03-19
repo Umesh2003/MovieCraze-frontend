@@ -16,12 +16,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMovieById, selectMovie,selectLoading, addToFavourite } from "../Redux/movieSlice";
+import {
+  getMovieById,
+  selectMovie,
+  selectLoading,
+  addToFavourite,
+} from "../Redux/movieSlice";
 import Loading from "../Components/Loading";
-import {selectUser} from "../Redux/usersSlice";
-import {displayToast} from "../Redux/toastSlice";
+import { selectUser } from "../Redux/usersSlice";
+import { displayToast } from "../Redux/toastSlice";
 import ReviewDetails from "../Components/ReviewDetails";
-import {getReviews} from "../Redux/reviewSlice";
+import { getReviews } from "../Redux/reviewSlice";
+import Footer from "../Sections/Footer";
 
 function Show() {
   const customFontStyle = {
@@ -29,35 +35,28 @@ function Show() {
   };
   const { movie_id } = useParams();
   const dispatch = useDispatch();
-  const navigate=useNavigate();
-
+  const navigate = useNavigate();
 
   const movie = useSelector(selectMovie);
   const loading = useSelector(selectLoading);
-  const user=useSelector(selectUser)
-  console.log(loading);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
-    console.log("Hello World");
     dispatch(getMovieById(movie_id));
     dispatch(getReviews(movie_id));
   }, [dispatch, movie_id]);
 
-  function favHandler(){
+  function favHandler() {
     if (!user) {
       navigate("/signin");
-      dispatch(displayToast("Please LogIn First"))
+      dispatch(displayToast("Please LogIn First"));
     }
-    dispatch(addToFavourite(user.user_id,movie_id));
+    dispatch(addToFavourite(user.user_id, movie_id));
   }
 
   if (loading) {
-    console.log("Hello World here laoind")
-    return (
-      <Loading mssg="Loading Movie Details...."/>
-    )
+    return <Loading mssg="Loading Movie Details...." />;
   }
-
 
   return (
     <Box
@@ -68,50 +67,52 @@ function Show() {
       <NavBar />
       {movie && (
         <Flex
-          flexDirection="row"
+          flexDirection="column"
           px={16}
           paddingTop={32}
           paddingBottom={12}
           gap={8}
         >
-          <Image src={movie.Poster_Link} alt="MovieImage" boxSize="28%" />
+          <Flex gap={8}>
+            <Image src={movie.Poster_Link} alt="MovieImage" boxSize="24%" />
 
-          {/* Movie details */}
+            {/* Movie details */}
 
-          <Box py={4} w="60%">
-            <Text
-              color={themeConfig.iconstextColor}
-              fontSize="2xl"
-              fontWeight={700}
-              letterSpacing={1.2}
-            >
-              New Release
-            </Text>
-            <Text color="white" fontSize="5xl" fontWeight={700}>
-              {movie.Series_Title}
-            </Text>
+            <Box py={4} w="60%">
+              <Text
+                color={themeConfig.iconstextColor}
+                fontSize="2xl"
+                fontWeight={700}
+                letterSpacing={1.2}
+              >
+                New Release
+              </Text>
+              <Text color="white" fontSize="5xl" fontWeight={700}>
+                {movie.Series_Title}
+              </Text>
 
-            <MovieDetail
-              movieType={movie.Genre.split("|").join(", ")}
-              year={movie.Released_Year}
-              duration={movie.Runtime}
-            />
-            <br />
-            <Text lineHeight={1.8} color={themeConfig.smallTextColor}>
-              {movie.Overview}
-            </Text>
-            <br />
+              <MovieDetail
+                movieType={movie.Genre.split("|").join(", ")}
+                year={movie.Released_Year}
+                duration={movie.Runtime}
+              />
+              <br />
+              <Text lineHeight={1.8} color={themeConfig.smallTextColor}>
+                {movie.Overview}
+              </Text>
+              <br />
 
-            <Flex gap={4}>
-              <Button leftIcon={<AddIcon />} onClick={favHandler} colorScheme="yellow">
-                Add to favourites
-              </Button>
-            </Flex>
-          </Box>
-
-          <Center height={450}>
-            <Divider orientation="vertical" />
-          </Center>
+              <Flex gap={4}>
+                <Button
+                  leftIcon={<AddIcon />}
+                  onClick={favHandler}
+                  colorScheme="yellow"
+                >
+                  Add to favourites
+                </Button>
+              </Flex>
+            </Box>
+          </Flex>
 
           <Box py={14}>
             <Flex gap={2}>
@@ -130,7 +131,9 @@ function Show() {
             <Divider />
             <Flex gap={2}>
               <Text fontWeight={500}>Genre:</Text>
-              <Text color={themeConfig.iconstextColor}>{movie.Genre.split("|").join(", ")}</Text>
+              <Text color={themeConfig.iconstextColor}>
+                {movie.Genre.split("|").join(", ")}
+              </Text>
             </Flex>
 
             <Divider />
@@ -143,11 +146,13 @@ function Show() {
           </Box>
         </Flex>
       )}
-      {movie && 
-        <Box mt={4} px={16}>
+      {movie && (
+        <Box mt={2} mb={12} px={16}>
           <ReviewDetails movie_name={movie.Series_Title} movie_id={movie_id} />
         </Box>
-      }
+      )}
+
+      <Footer />
     </Box>
   );
 }

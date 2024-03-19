@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import {
   Avatar,
   Box,
@@ -17,22 +19,21 @@ import {
   AccordionItem,
   Accordion,
   AccordionButton,
+  Divider,
 } from "@chakra-ui/react";
 import ReviewDrawer from "./ReviewDrawer";
 import { ArrowRightIcon } from "@chakra-ui/icons";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { themeConfig } from "../Utils/themeConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faStar,
-  faThumbsDown,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import ReviewLabels from "./ReviewLabels";
-import { selectLoading, selectReviews} from "../Redux/reviewSlice";
+import { selectLoading, selectReviews } from "../Redux/reviewSlice";
 import Loading from "./Loading";
+import ReviewTable from "./ReviewTable";
+import Footer from "../Sections/Footer";
 
-function ReviewDetails({movie_id,movie_name}) {
+function ReviewDetails({ movie_id, movie_name }) {
   const labels = [
     "Acting",
     "Music",
@@ -41,19 +42,15 @@ function ReviewDetails({movie_id,movie_name}) {
     "Direction",
   ];
 
-  const reviews=useSelector(selectReviews)
-  const loading=useSelector(selectLoading);
+  const reviews = useSelector(selectReviews);
+  const loading = useSelector(selectLoading);
 
   if (loading) {
-    return (
-      <Loading mssg="Loading Favourites...."/>
-    )
+    return <Loading mssg="Loading Favourites...." />;
   }
 
-
-
   return (
-    <Box px={8} bgColor="blackAlpha.500">
+    <Box pb={2} px={8} bgColor="blackAlpha.500">
       <Flex
         justifyContent="space-between"
         alignItems="center"
@@ -67,122 +64,130 @@ function ReviewDetails({movie_id,movie_name}) {
           </Text>
           <ArrowRightIcon mx={4} color={themeConfig.iconstextColor} />
         </Text>
-        <ReviewDrawer size="sm" movie_name={movie_name} movie_id={movie_id}/>
+        <ReviewDrawer size="sm" movie_name={movie_name} movie_id={movie_id} />
       </Flex>
 
-      <Grid templateColumns="repeat(2,1fr)" gap={4} my={6}>
-        {reviews && reviews.map((review) => (
-          <Card maxW="6xl" key={review.id}>
-            <CardHeader>
-              <Flex spacing="4">
-                <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                  <Avatar
-                    name={review.userName}
-                    src={`https://bit.ly/${review.userName}`}
-                  />
-
-                  <Box>
-                    <Heading size="sm">{review.userName}</Heading>
-                  </Box>
-
-                  {/* {review.isPositive ? ( */}
-                  {/*   <Badge colorScheme="green">Positive</Badge> */}
-                  {/* ) : ( */}
-                  {/*   <Badge colorScheme="red">Negative</Badge> */}
-                  {/* )} */}
-
-                  {review.isSpoiler!=="1" && (
-                    <Badge colorScheme="orange">Spoilers</Badge>
-                  )}
-                </Flex>
-                <IconButton
-                  variant="ghost"
-                  colorScheme="gray"
-                  aria-label="See menu"
-                />
-              </Flex>
-            </CardHeader>
-            <CardBody>
-              <Box borderBottom="1px solid gray">
-                <Heading size="sm">{review.review_title}</Heading>
-
-                {review.isSpoiler!=="1" ? (
-                  <Accordion allowMultiple>
-                    <AccordionItem>
-                      <h2>
-                        <AccordionButton>
-                          <Box as="span" flex="1" textAlign="left">
-                            <Text color="red.600"> Warning : Spoiler</Text>
-                          </Box>
-                          <AccordionIcon />
-                        </AccordionButton>
-                      </h2>
-                      <AccordionPanel>
-                        <Text>{review.review}</Text>
-                      </AccordionPanel>
-                    </AccordionItem>
-                  </Accordion>
-                ) : (
-                  <Text>{review.review}</Text>
-                )}
-              </Box>
-
-              {/* <Flex justifyContent="space-between" py={2}> */}
-              {/*   <Heading size="sm" colorScheme="blue"> */}
-              {/*     Overall rating */}
-              {/*   </Heading> */}
-              {/*   <Heading size="sm"> */}
-              {/*     <FontAwesomeIcon icon={faStar} color="gold" /> */}
-              {/*     {review.ratings.reduce((ac, i) => ac + i, 0) / 5}/10 */}
-              {/*   </Heading> */}
-              {/* </Flex> */}
-
-              {/* <Flex> */}
-              {/*   <Flex flex={1} flexDirection="column"> */}
-              {/*     {labels.map((label) => ( */}
-              {/*       <ReviewLabels key={label} label={label} /> */}
-              {/*     ))} */}
-              {/*   </Flex> */}
-
-              {/*   <Flex flexDirection="column" justifyContent="center"> */}
-              {/*     {review.ratings.map((rating) => ( */}
-              {/*       <ReviewLabels key={rating} label={rating} /> */}
-              {/*     ))} */}
-              {/*   </Flex> */}
-              {/* </Flex> */}
-            </CardBody>
-
-            <CardFooter
-              justify="space-between"
-              flexWrap="wrap"
-              sx={{
-                "& > button": {
-                  minW: "136px",
-                },
-              }}
+      <Grid gridTemplateColumns="repeat(2,1fr)" gap={6} my={6}>
+        {reviews &&
+          reviews.map((review) => (
+            <Card
+              maxW="10xl"
+              key={review.id}
+              bgColor={themeConfig.bgDark}
+              color="#fff"
             >
-              <Flex justifyContent="center" gap={6} alignItems="center">
-                <Text pt={4} color="gray.500" fontSize="md" fontWeight="bold">
-                  Was this review helpful?
-                </Text>
+              <CardHeader>
+                <Flex spacing="4">
+                  <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+                    <Avatar
+                      name={review.userName}
+                      src={`https://bit.ly/${review.userName}`}
+                    />
 
-                <Button flex="1" variant="ghost" alignItems="center" gap={2}>
-                  <FontAwesomeIcon size="xl" icon={faThumbsUp} />
-                  <Text as="span" fontSize="lg">
-                    20
-                  </Text>
-                </Button>
+                    <Box>
+                      <Heading size="sm">{review.userName}</Heading>
+                    </Box>
 
-                <Button flex="1" variant="ghost" alignItems="center" gap={2}>
-                  <FontAwesomeIcon size="xl" icon={faThumbsDown} />
-                  <Text as="span" fontSize="lg">
-                    5
+                    {/* {review.isPositive ? ( */}
+                    {/*   <Badge colorScheme="green">Positive</Badge> */}
+                    {/* ) : ( */}
+                    {/*   <Badge colorScheme="red">Negative</Badge> */}
+                    {/* )} */}
+
+                    {review.isSpoiler !== "1" && (
+                      <Badge colorScheme="red">Spoilers</Badge>
+                    )}
+                  </Flex>
+                </Flex>
+              </CardHeader>
+              <Divider />
+              <CardBody>
+                <Box borderBottom="1px solid gray" pb={4}>
+                  <Heading size="md" mb={4}>
+                    {review.review_title}
+                  </Heading>
+
+                  {review.isSpoiler !== "1" ? (
+                    <Flex gap={2}>
+                      <Accordion allowMultiple flex={1}>
+                        <AccordionItem>
+                          <h2>
+                            <AccordionButton>
+                              <Box as="span" flex="1" textAlign="left">
+                                <Text color="red.600"> Warning : Spoiler</Text>
+                              </Box>
+                              <AccordionIcon />
+                            </AccordionButton>
+                          </h2>
+                          <AccordionPanel>
+                            {/* <Text>{review.review}</Text> */}
+                            <Text>
+                              The action sequences, particularly the depiction
+                              of the surgical strikes, were highly praised for
+                              their realism, intensity, and technical finesse.
+                            </Text>
+                          </AccordionPanel>
+                        </AccordionItem>
+                      </Accordion>
+                      <ReviewTable review={review} />
+                    </Flex>
+                  ) : (
+                    <Flex justifyContent="space-between">
+                      {/* <Text>{review.review}</Text> */}
+                      <Text width="60%">
+                        Vicky Kaushal's portrayal of Major Vihaan Singh Shergill
+                        received widespread acclaim. His performance was praised
+                        for its intensity, sincerity, and emotional depth.
+                      </Text>
+                      <ReviewTable review={review} />
+                    </Flex>
+                  )}
+                </Box>
+              </CardBody>
+
+              <CardFooter
+                justify="space-between"
+                flexWrap="wrap"
+                sx={{
+                  "& > button": {
+                    minW: "136px",
+                  },
+                }}
+              >
+                <Flex justifyContent="center" gap={6} alignItems="center">
+                  <Text pt={4} color="gray.500" fontSize="md" fontWeight="bold">
+                    Was this review helpful?
                   </Text>
-                </Button>
-              </Flex>
-            </CardFooter>
-          </Card>
-        ))}
+
+                  <Button
+                    flex="1"
+                    variant="solid"
+                    size="sm"
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <FontAwesomeIcon size="xl" icon={faThumbsUp} />
+                    <Text as="span" fontSize="lg">
+                      20
+                    </Text>
+                  </Button>
+
+                  <Button
+                    flex="1"
+                    size="sm"
+                    variant="solid"
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <FontAwesomeIcon size="xl" icon={faThumbsDown} />
+                    <Text as="span" fontSize="lg">
+                      5
+                    </Text>
+                  </Button>
+                </Flex>
+              </CardFooter>
+            </Card>
+          ))}
       </Grid>
     </Box>
   );

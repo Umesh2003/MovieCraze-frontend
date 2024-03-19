@@ -15,6 +15,7 @@ function Footer() {
         height="70px"
         px="48"
         fontSize="md"
+        w="100%"
       >
         Copyright © 2024 All Rights Reserved By MovieCraze
       </Center>

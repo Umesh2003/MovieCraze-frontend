@@ -122,6 +122,7 @@ export const getMovieById = (movieId) => async (dispatch) => {
     if (response.status === 201) {
       const movie = await response.json();
       dispatch(setMovie(movie));
+      document.title = `${movie.Series_Title} (${movie.Released_Year})`;
     }
   } catch (err) {
     console.error(err);

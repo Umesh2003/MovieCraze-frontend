@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 import { CalendarIcon, TimeIcon } from "@chakra-ui/icons";
 import { themeConfig } from "../Utils/themeConfig";
+import { Flex } from "@chakra-ui/react";
 
 export default function MovieDetail({ movieType, year, duration }) {
   return (
-    <div
+    <Flex
       className="carousel-desc"
-      style={{ display: "flex", gap: "1.2rem", alignItems: "center" }}
+      style={{ display: "flex", gap: "1.6rem", alignItems: "center" }}
     >
       <p
         style={{
@@ -39,8 +40,8 @@ export default function MovieDetail({ movieType, year, duration }) {
       <p>
         <TimeIcon color={themeConfig.iconstextColor}></TimeIcon>
         <span style={{ marginLeft: "10px" }}></span>
-        {duration} min
+        {duration}
       </p>
-    </div>
+    </Flex>
   );
 }

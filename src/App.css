@@ -127,3 +127,7 @@ body {
 *::-webkit-scrollbar-thumb:active {
   background-color: #c7bd03;
 }
+
+.hover-img:hover {
+  opacity: 0.8;
+}
