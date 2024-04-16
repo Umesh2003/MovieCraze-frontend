@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
 import { ADD_REVIEW, GET_REVIEWS } from "../Constants/urls";
 import { displayToast } from "./toastSlice";
